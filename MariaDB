@@ -1,0 +1,16 @@
+# installation of maria DB :
+
+services:
+
+
+
+    db:
+        container_name: "${APP_NAME}mariadb"
+        image: mariadb/server:10.5
+        restart: always
+        # be sure to run `docker volume rm dev_dev_conf` when changing envs
+        environment:
+            MARIADB_ROOT_PASSWORD: "${MARIADB_ROOT_PASSWORD}"
+            MARIADB_DATABASE: "${MARIADB_DATABASE}"
+            MARIADB_USER: "${MARIADB_USER}"
+            MARIADB_PASSWORD: "${MARIADB_PASSWORD}"
