@@ -1,0 +1,48 @@
+query Top10ProblematicDevice(
+  $Org: [String]
+  $TotalCount: Int
+  $Severity: [String]
+) {
+  devices(
+    search: {
+      and: [
+        { organization: { has: { company: { in: $Org } } } }
+        { event: { has: { severity: { in: $Severity } } } }
+      ]
+    }
+    first: $TotalCount
+  ) {
+    edges {
+      node {
+        organization {
+          OrganizationName: company
+        }
+        id
+        IP: ip
+        name
+        deviceClass {
+          DeviceClassSubClass: logicalName
+          deviceCategory {
+            DeviceCategory: name
+          }
+        }
+        asset {
+          Location: location
+          vendor: make
+        }
+        events(search: { severity: { in: $Severity } }) {
+          edges {
+            node {
+              Message: message
+              severity
+              LastDetection: dateLast
+            }
+          }
+        }
+      }
+    }
+    pageInfo {
+      matchCount
+    }
+  }
+}

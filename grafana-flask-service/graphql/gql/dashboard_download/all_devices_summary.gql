@@ -1,0 +1,138 @@
+query SummaryOfAllDevices(
+  $Org: [String]
+  $TotalCount: Int
+  $Severity: [String]
+) {
+  TotalDeviceSummary: devices(
+    search: { and: [{ organization: { has: { company: { in: $Org } } } }] }
+    first: $TotalCount
+  ) {
+    pageInfo {
+      matchCount
+    }
+    edges {
+      node {
+        organization {
+          OrganizationName: company
+        }
+        id
+        IP: ip
+        name
+        deviceClass {
+          DeviceClassSubClass: logicalName
+          deviceCategory {
+            DeviceCategory: name
+          }
+        }
+        asset {
+          Location: location
+          vendor: make
+        }
+      }
+    }
+  }
+  DeviceAlarmSummary: devices(
+    search: {
+      and: [
+        { event: { has: { severity: { in: $Severity } } } }
+        { organization: { has: { company: { in: $Org } } } }
+      ]
+    }
+    first: $TotalCount
+  ) {
+    pageInfo {
+      matchCount
+    }
+    edges {
+      node {
+        organization {
+          OrganizationName: company
+        }
+        id
+        IP: ip
+        name
+        deviceClass {
+          DeviceClassSubClass: logicalName
+          deviceCategory {
+            DeviceCategory: name
+          }
+        }
+        asset {
+          Location: location
+          vendor: make
+        }
+        events(search: { severity: { in: $Severity } }) {
+          edges {
+            node {
+              Message: message
+              severity
+              LastDetection: dateLast
+            }
+          }
+        }
+      }
+    }
+  }
+  DeviceDownCountSummary: devices(
+    search: {
+      and: [
+        {
+          event: {
+            has: {
+              message: {
+                in: [
+                  "Device Failed Availability Check: UDP - SNMP"
+                  "Device Failed Availability Check: ICMP - Ping"
+                ]
+              }
+            }
+          }
+        }
+        { organization: { has: { company: { in: $Org } } } }
+      ]
+    }
+    first: $TotalCount
+  ) {
+    pageInfo {
+      matchCount
+    }
+    edges {
+      node {
+        organization {
+          OrganizationName: company
+        }
+        id
+        IP: ip
+        name
+        deviceClass {
+          DeviceClassSubClass: logicalName
+          deviceCategory {
+            DeviceCategory: name
+          }
+        }
+        asset {
+          Location: location
+          vendor: make
+        }
+        events(
+          search: {
+            message: {
+              in: [
+                "Device Failed Availability Check: UDP - SNMP"
+                "Device Failed Availability Check: ICMP - Ping"
+              ]
+            }
+          }
+        ) {
+          edges {
+            node {
+              Message: message
+              severity
+              LastDetection: dateLast
+            }
+          }
+        }
+      }
+    }
+  }
+}

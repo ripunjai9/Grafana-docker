@@ -1,0 +1,50 @@
+query detailsSeverityCount($Org: [String]) {
+  notice: events(
+    search: {
+      and: [
+        { severity: { eq: "1" } }
+        { organization: { has: { company: { in: $Org } } } }
+      ]
+    }
+  ) {
+    pageInfo {
+      matchCount
+    }
+  }
+  minor: events(
+    search: {
+      and: [
+        { severity: { eq: "2" } }
+        { organization: { has: { company: { in: $Org } } } }
+      ]
+    }
+  ) {
+    pageInfo {
+      matchCount
+    }
+  }
+  major: events(
+    search: {
+      and: [
+        { severity: { eq: "3" } }
+        { organization: { has: { company: { in: $Org } } } }
+      ]
+    }
+  ) {
+    pageInfo {
+      matchCount
+    }
+  }
+  critical: events(
+    search: {
+      and: [
+        { severity: { eq: "4" } }
+        { organization: { has: { company: { in: $Org } } } }
+      ]
+    }
+  ) {
+    pageInfo {
+      matchCount
+    }
+  }
+}

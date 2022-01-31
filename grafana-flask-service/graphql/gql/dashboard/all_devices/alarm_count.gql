@@ -1,0 +1,15 @@
+query eventCount($Org: [String], $Severity: [String]) {
+  events(
+    search: {
+      and: [
+        { organization: { has: { company: { in: $Org } } } }
+        { severity: { in: $Severity } }
+        { xtype: { eq: 1 } }
+      ]
+    }
+  ) {
+    pageInfo {
+      matchCount
+    }
+  }
+}

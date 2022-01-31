@@ -1,0 +1,50 @@
+query ProblematicDevices(
+  $Org: [String]
+  $TotalCount: Int
+  $Severity: [String]
+) {
+  devices(
+    search: {
+      and: [
+        { organization: { has: { company: { in: $Org } } } }
+        { event: { has: { severity: { in: $Severity } } } }
+      ]
+    }
+    first: $TotalCount
+  ) {
+    edges {
+      node {
+        organization {
+          company
+        }
+        ip
+        id
+        name
+        deviceClass {
+          logicalName
+          class
+          description
+          deviceCategory {
+            name
+          }
+        }
+        asset {
+          location
+          make
+        }
+        events(search: { severity: { in: $Severity } }) {
+          edges {
+            node {
+              message
+              severity
+              dateLast
+            }
+          }
+        }
+      }
+    }
+    pageInfo {
+      matchCount
+    }
+  }
+}

@@ -1,0 +1,26 @@
+query eventsDownCount($Org: [String], $Severity: [String]) {
+  devices(
+    search: {
+      and: [
+        {
+          event: {
+            has: {
+              message: {
+                in: [
+                  "Device Failed Availability Check: UDP - SNMP"
+                  "Device Failed Availability Check: ICMP - Ping"
+                ]
+              }
+            }
+          }
+        }
+        { organization: { has: { company: { in: $Org } } } }
+        { event: { has: { severity: { in: $Severity } } } }
+      ]
+    }
+  ) {
+    pageInfo {
+      matchCount
+    }
+  }
+}

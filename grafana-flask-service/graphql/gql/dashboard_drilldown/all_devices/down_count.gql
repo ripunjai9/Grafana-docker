@@ -1,0 +1,67 @@
+query infrastruture($Org: [String], $TotalCount: Int) {
+  devices(
+    search: {
+      and: [
+        {
+          event: {
+            has: {
+              message: {
+                in: [
+                  "Device Failed Availability Check: UDP - SNMP"
+                  "Device Failed Availability Check: ICMP - Ping"
+                ]
+              }
+            }
+          }
+        }
+        { organization: { has: { company: { in: $Org } } } }
+      ]
+    }
+    first: $TotalCount
+  ) {
+    pageInfo {
+      matchCount
+    }
+    edges {
+      node {
+        organization {
+          company
+        }
+        id
+        ip
+        name
+        deviceClass {
+          id
+          logicalName
+          class
+          description
+          deviceCategory {
+            name
+          }
+        }
+        asset {
+          location
+          make
+        }
+        events(
+          search: {
+            message: {
+              in: [
+                "Device Failed Availability Check: UDP - SNMP"
+                "Device Failed Availability Check: ICMP - Ping"
+              ]
+            }
+          }
+        ) {
+          edges {
+            node {
+              dateLast
+              message
+              severity
+            }
+          }
+        }
+      }
+    }
+  }
+}

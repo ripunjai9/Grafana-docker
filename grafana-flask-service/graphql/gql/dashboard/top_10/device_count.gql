@@ -1,0 +1,29 @@
+query Problematic($Org: [String], $Severity: [String], $TotalCount: Int) {
+  devices(
+    search: {
+      and: [
+        { organization: { has: { company: { in: $Org } } } }
+        { event: { has: { severity: { in: $Severity } } } }
+      ]
+    }
+    first: $TotalCount
+  ) {
+    pageInfo {
+      matchCount
+    }
+    edges {
+      node {
+        id
+        name
+        events(search: { severity: { in: $Severity } }) {
+          edges {
+            node {
+              message
+              dateLast
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,7 @@
+query DeviceCount($Org: [String]) {
+  devices(search: { organization: { has: { company: { in: $Org } } } }) {
+    pageInfo {
+      matchCount
+    }
+  }
+}

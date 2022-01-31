@@ -1,0 +1,30 @@
+query infrastruture($Org: [String], $TotalCount: Int) {
+  devices(
+    search: { and: [{ organization: { has: { company: { in: $Org } } } }] }
+    first: $TotalCount
+  ) {
+    pageInfo {
+      matchCount
+    }
+    edges {
+      node {
+        organization {
+          company
+        }
+        id
+        ip
+        name
+        deviceClass {
+          logicalName
+          deviceCategory {
+            name
+          }
+        }
+        asset {
+          location
+          make
+        }
+      }
+    }
+  }
+}
